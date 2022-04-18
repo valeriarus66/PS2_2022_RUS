@@ -1,34 +1,40 @@
 #include <EEPROM.h>
+//char mesaje 10 mesaje a cate 32 [10][32].
+char msg[10][32]{
+  "msg1",
+  "msg2",
+  "msg3",
+  "msg4",
+  "msg5",
+  "msg6",
+  "msg7",
+  "msg8",
+  "msg9",
+  "msg10"
+};
 
-void writeS(int adress, String str)
-{
-  byte len = str.length();
-  EEPROM.write(adress,len);
-  for(int i=0; i<len; i++){
-    EEPROM.write(adress+1+i, str[i]);
-  }
-}
-String readS(int adress)
-{
-  int len = EEPROM.read(adress);
-  char data[len+1];
-
-  for(int i=0; i<len; i++){
-    data[i] = EEPROM.read(adress+1+i);
-  }
-  data[len] = '\0';
-
-  return String(data);
-}
+char reloadedTags[10][32];
 
 void setup() {
   // put your setup code here, to run once:
+  
   Serial.begin(9600);
-  writeS(15,"Hello !");
-  Serial.println(readS(15));
+  while(!Serial);
+  EEPROM.put(0,msg);
+  EEPROM.get(0,reloadedTags);
+  for( int tag=0; tag<10; tag++)
+  {
+    for (int c=0; c<32;c++)
+    {
+      Serial.print(reloadedTags[tag][c]);
+    }
+    Serial.println();
+  }
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
+  
+     //delay(1000);
 
 }
